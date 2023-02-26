@@ -29,12 +29,12 @@ export const List = ({ navigation }) => {
     }
 
     const handleEdit = (id: number) => {
-        navigation.navigate(ROUTE_NAMES.APP_EDIT, { id })
+        navigation.navigate(ROUTE_NAMES.EDIT, { id })
     }
 
     useMemo(() => {
         fetchData()
-    }, [])
+    }, [listItems])
 
     return (
         <Container>

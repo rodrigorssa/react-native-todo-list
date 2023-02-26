@@ -33,7 +33,7 @@ const AppForm = ({ navigation }) => {
             await saveItem(result)
             Alert.alert('Sucesso', 'Registro salvo.')
             setFormData(createInitialform)
-            navigation.navigate(ROUTE_NAMES.APP_LIST)
+            navigation.navigate(ROUTE_NAMES.LIST_NAVIGATOR)
         } catch (error) {
             console.log(error);
             Alert.alert('Erro', 'Ocorreu algum erro.')

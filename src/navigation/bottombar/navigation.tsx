@@ -21,7 +21,7 @@ const screenOptions: any = {
 }
 
 const currentRoutes = [
-    appRoutes.List,
+    appRoutes.ListNavigator,
     appRoutes.Form,
 ]
 
