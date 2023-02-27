@@ -1,7 +1,7 @@
-import React, { useState, useMemo } from 'react'
-import { ScrollView } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { RefreshControl } from 'react-native'
 import { ErrorAlert } from '../../../../components/Alert'
-import { Container } from '../../../../components/Container'
+import { Container, ContainerScrollView } from '../../../../components/Container'
 import { Loader } from '../../../../components/Loader'
 import { Title } from '../../../../components/Title'
 import { ERROR_MESSAGES, ROUTE_NAMES } from '../../../../constant'
@@ -10,17 +10,18 @@ import { Item } from '../components/item'
 
 export const List = ({ navigation }) => {
     const [loader, setLoader] = useState(false)
+    const [refresh, setRefresh] = useState(false)
     const [listItems, setListItems] = useState([] as AppListEntity[])
 
-    const fetchData = async () => {
+    const fetchData = async (customLoader) => {
         try {
-            setLoader(true)
+            customLoader(true)
             const data = await getItems()
             setListItems(data)
         } catch (error) {
             ErrorAlert(ERROR_MESSAGES.GENERIC)
         } finally {
-            setLoader(false)
+            customLoader(false)
         }
     }
 
@@ -32,20 +33,26 @@ export const List = ({ navigation }) => {
         navigation.navigate(ROUTE_NAMES.EDIT, { id })
     }
 
-    useMemo(() => {
-        fetchData()
-    }, [listItems])
+    const handleRefresh = () => {
+        fetchData(setRefresh)
+    };
+
+    useEffect(() => {
+        fetchData(setLoader)
+    }, [])
 
     return (
         <Container>
             {loader && <Loader />}
-            {
-                listItems.length > 0 ?
-                    (
-                        <>
-                            <ScrollView style={{
-                                width: '90%'
-                            }}>
+            <ContainerScrollView refreshControl={
+                <RefreshControl refreshing={refresh} onRefresh={handleRefresh} />
+            }>
+
+                {
+                    listItems.length > 0 ?
+                        (
+                            <>
+
                                 <Title>Lista de compras</Title>
                                 {
                                     listItems.map(item =>
@@ -56,10 +63,11 @@ export const List = ({ navigation }) => {
                                             onEdit={handleEdit}
                                         />)
                                 }
-                            </ScrollView></>
-                    )
-                    : <Title>Nenhum item na lista.</Title>
-            }
+                            </>
+                        )
+                        : <Title>Nenhum item na lista.</Title>
+                }
+            </ContainerScrollView>
         </Container >
     )
 }
