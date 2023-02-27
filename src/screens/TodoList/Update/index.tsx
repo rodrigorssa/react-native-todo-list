@@ -5,9 +5,9 @@ import { InputContainer } from "../../../components/InputContainer";
 import { Input } from "../../../components/Input";
 import { Button } from "../../../components/Button";
 import { FormDataFields, AppListEntity, editItem, getItemById } from "../../../store";
-import { Alert } from "react-native";
-import { ROUTE_NAMES } from "../../../constant";
+import { ERROR_MESSAGES, ROUTE_NAMES, SUCCESS_MESSAGES } from "../../../constant";
 import { Loader } from "../../../components/Loader";
+import { ErrorAlert, SuccessAlert } from "../../../components/Alert";
 
 const AppForm = ({ route, navigation }) => {
     const routeId = route?.params?.id;
@@ -25,11 +25,8 @@ const AppForm = ({ route, navigation }) => {
             if (data) {
                 setFormData(data)
             }
-
         } catch (error: any) {
-            console.log(error);
-            Alert.alert('Ocorreu algum erro', error)
-
+            ErrorAlert(ERROR_MESSAGES.GENERIC)
         } finally {
             setLoader(false)
         }
@@ -57,13 +54,11 @@ const AppForm = ({ route, navigation }) => {
                 quantity: formData.quantity
             }
             await editItem(result)
-            Alert.alert('Sucesso', 'Registro editado.')
+            SuccessAlert(SUCCESS_MESSAGES.EDITED)
             navigation.navigate(ROUTE_NAMES.LIST)
         } catch (error) {
-            console.log(error);
-            Alert.alert('Erro', 'Ocorreu algum erro.')
+            ErrorAlert(ERROR_MESSAGES.GENERIC)
         }
-
     }
 
     return (

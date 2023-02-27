@@ -5,8 +5,8 @@ import { InputContainer } from "../../../components/InputContainer";
 import { Input } from "../../../components/Input";
 import { Button } from "../../../components/Button";
 import { FormDataFields, AppListEntity, saveItem } from "../../../store";
-import { Alert } from "react-native";
-import { ROUTE_NAMES } from "../../../constant";
+import { ERROR_MESSAGES, ROUTE_NAMES, SUCCESS_MESSAGES } from "../../../constant";
+import { ErrorAlert, SuccessAlert } from "../../../components/Alert";
 
 const AppForm = ({ navigation }) => {
     const createInitialform = {
@@ -31,12 +31,11 @@ const AppForm = ({ navigation }) => {
                 quantity: formData.quantity
             }
             await saveItem(result)
-            Alert.alert('Sucesso', 'Registro salvo.')
+            SuccessAlert(SUCCESS_MESSAGES.CREATED)
             setFormData(createInitialform)
             navigation.navigate(ROUTE_NAMES.LIST_NAVIGATOR)
         } catch (error) {
-            console.log(error);
-            Alert.alert('Erro', 'Ocorreu algum erro.')
+            ErrorAlert(ERROR_MESSAGES.GENERIC)
         }
 
     }
